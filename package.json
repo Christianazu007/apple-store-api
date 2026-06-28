@@ -1,0 +1,29 @@
+{
+  "name": "apple-store-api",
+  "version": "1.0.0",
+  "description": "Proyecto final Curso node.js",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Christianazu007/apple-store-api.git"
+  },
+  "keywords": [],
+  "author": "Christian Azua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Christianazu007/apple-store-api/issues"
+  },
+  "homepage": "https://github.com/Christianazu007/apple-store-api#readme",
+  "dependencies": {
+    "body-parser": "^2.3.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "firebase": "^12.15.0",
+    "jsonwebtoken": "^9.0.3"
+  }
+}
