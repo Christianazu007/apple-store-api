@@ -1,52 +1,39 @@
-// Datos de ejemplo - Apple Store
-let products = [
-  {
-    id: '1',
-    name: 'iPhone 15 Pro',
-    price: 999,
-    category: 'smartphone',
-    description: '6.1 pulgadas, chip A17 Pro, titanio',
-    stock: 50
-  },
-  {
-    id: '2',
-    name: 'MacBook Pro 14',
-    price: 1999,
-    category: 'laptop',
-    description: 'Chip M3 Pro, 18GB RAM, 512GB SSD',
-    stock: 30
-  },
-  {
-    id: '3',
-    name: 'iPad Pro 12.9',
-    price: 1099,
-    category: 'tablet',
-    description: 'Chip M2, pantalla Liquid Retina XDR',
-    stock: 40
-  }
-];
+import { db } from '../config/firebase.js';
+import {
+  collection,
+  getDocs,
+  getDoc,
+  addDoc,
+  deleteDoc,
+  doc
+} from 'firebase/firestore';
+
+const productsCollection = collection(db, 'products');
 
 export const getAll = async () => {
-  return products;
+  const snapshot = await getDocs(productsCollection);
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
 };
 
 export const getById = async (id) => {
-  const product = products.find(p => p.id === id);
-  return product || null;
+  const docRef = doc(db, 'products', id);
+  const snapshot = await getDoc(docRef);
+  if (!snapshot.exists()) return null;
+  return { id: snapshot.id, ...snapshot.data() };
 };
 
 export const create = async (data) => {
-  const newProduct = {
-    id: String(products.length + 1),
-    ...data
-  };
-  products.push(newProduct);
-  return newProduct;
+  const docRef = await addDoc(productsCollection, data);
+  return { id: docRef.id, ...data };
 };
 
 export const remove = async (id) => {
-  const index = products.findIndex(p => p.id === id);
-  if (index === -1) return null;
-  const deleted = products.splice(index, 1);
-  return deleted[0];
+  const docRef = doc(db, 'products', id);
+  const snapshot = await getDoc(docRef);
+  if (!snapshot.exists()) return null;
+  await deleteDoc(docRef);
+  return { id, ...snapshot.data() };
 };
